@@ -2,6 +2,36 @@ name: Azure Pipelines
 variables:
   python.version: '3.7.6'
 stages:
+- stage: Provisioning
+  jobs:
+  - job:
+    steps:
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'default'
+        sshKeySecureFile: 'id_rsa'
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'ls /home/vsts/work/_temp/'
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformCLI@0
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        allowTelemetryCollection: true
+    - task: TerraformCLI@0
+      inputs:
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        allowTelemetryCollection: true
+    - task: TerraformCLI@0
+      inputs:
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        allowTelemetryCollection: true
 - stage: Build
   jobs:
   - job: Build
@@ -24,6 +54,7 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
+    
 - stage:
   jobs:
   - deployment: FakeRestAPI
@@ -41,27 +72,115 @@ stages:
               appName: ''
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-  # - deployment: VMDeploy
-  #   displayName: NAME
-  #   environment:
-  #     name:  ENVIRONMENT NAME
-  #     resourceType: VirtualMachine
-  #     tags: TAG NAME
-  #   strategy:
-  #     runOnce:
-  #       deploy:
-  #         steps:
-  #         - task: Bash@3
-  #           inputs:
-  #             targetType: 'inline'
-  #             script: |
-  #               #! /bin/bash
-                
-  #               sudo apt-get upgrade -y
-  #               sudo apt-get install python3-pip -y
-  #               sudo apt-get install unzip -y
-  #               sudo apt-get install -y chromium-browser
-  #               pip3 install selenium
-  #               export PATH=$PATH:some/path
+  - deployment: VMDeploy
+    displayName: NAME
+    environment:
+        name:  ENVIRONMENT NAME
+        resourceType: VirtualMachine
+        tags: TAG NAME
+    strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: |
+                  #! /bin/bash
+
+                  sudo apt-get upgrade -y
+                  sudo apt-get install python3-pip -y
+                  sudo apt-get install unzip -y
+                  sudo apt-get install -y chromium-browser
+                  pip3 install selenium
+                  export PATH=$PATH:some/path
+- stage: UITests
+  displayName: UI Tests
+  jobs:
+  - deployment: VMRunUITests
+    displayName: Run UI Tests
+    environment:
+      name:  'VM-TEST'
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            displayName: 'Download Selenium'
+            artifact: selenium
+          - task: Bash@3
+            displayName: UI Tests
+            inputs:
+              targetType: 'inline'
+              script: |
+                unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
+                sudo mkdir /var/logs
+                python3 uitests.py > ui-logs.log
+                cat ui-logs.log
+                sudo mv ui-logs.log /var/logs
+
+- stage: IntegrationTests
+  displayName: Integration Tests
+  jobs:
+  - job: PostmanTests
+    displayName: PostmanTests
+    steps: 
+    - task: NodeTool@0
+      displayName: Install Node v12.X
+      inputs:
+        versionSpec: '12.x'
+    - task: CmdLine@2
+      displayName: Install Newman
+      inputs:
+        script: 'npm install newman'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    - task: CmdLine@2
+      displayName: Run Regression Tests
+      inputs:
+        script: 'newman run automatedtesting/postman/RegressionTestSuite.json -e automatedtesting/postman/RegressionTestSuite.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/RegressionTests.xml'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+      continueOnError: true
+    - task: CmdLine@2
+      displayName: Run Data Validation Tests
+      inputs:
+        script: 'newman run automatedtesting/postman/DataValidationTestSuite.json -e automatedtesting/postman/DataValidationTestSuite.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/DataValidationTests.xml'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+      continueOnError: true
+    - task: CmdLine@2
+      inputs:
+        script: 'ls'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    - task: PublishTestResults@2
+      displayName: Publish Test Reports
+      condition: always()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(System.DefaultWorkingDirectory)/Results/*.xml'
+
+- stage: JMeterTests
+  displayName: JMeter Tests
+  jobs:
+  - job: JMeterTests
+    displayName: JMeterTests
+    steps: 
+    - task: JMeterInstaller@0
+      inputs:
+        jmeterVersion: '5.2.1'
+    - task: Bash@3
+      displayName: EnduranceTest
+      inputs:
+        targetType: 'inline'
+        script: 'jmeter -n -t automatedtesting/jmeter/EnduranceTestSuite.jmx -Jresdir=automatedtesting/jmeter/endurancepages.csv -l automatedtesting/jmeter/report/enduranceresults.jtl -e -o automatedtesting/jmeter/endurancereport'
+    - task: Bash@3
+      displayName: StressTest
+      inputs:
+        targetType: 'inline'
+        script: 'jmeter -n -t automatedtesting/jmeter/StressTestSuite.jmx -Jresdir=automatedtesting/jmeter/stresspages.csv -l automatedtesting/jmeter/report/stressresults.jtl -e -o automatedtesting/jmeter/stressreport'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'automatedtesting/jmeter'
+        ArtifactName: 'jmeter'
+        publishLocation: 'Container'
 
 
