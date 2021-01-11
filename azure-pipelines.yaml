@@ -6,10 +6,6 @@ stages:
   jobs:
   - job:
     steps:
-    - task: InstallSSHKey@0
-      inputs:
-        knownHostsEntry: 'default'
-        sshKeySecureFile: 'id_rsa'
     - task: Bash@3
       inputs:
         targetType: 'inline'
@@ -39,11 +35,10 @@ stages:
       name: Hosted Ubuntu 1604
     steps:
     # Needed for Terraform VM deployment
-    # - task: InstallSSHKey@0
-    #   inputs:
-    #     knownHostsEntry: 'KNOWN_HOSTS_STRING'
-    #     sshPublicKey: 'PUBLIC_KEY'
-    #     sshKeySecureFile: 'id_rsa'
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'default'
+        sshKeySecureFile: 'id_rsa'
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
@@ -94,6 +89,22 @@ stages:
                   sudo apt-get install -y chromium-browser
                   pip3 install selenium
                   export PATH=$PATH:some/path
+                  
+                  # download chrome driver
+                  FILE=chromedriver_linux64.zip
+                  if [ -f "$FILE" ]; then
+                    echo "$FILE exists."
+                  else
+                    wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
+                  fi
+                  # install chrome driver
+                  unzip chromedriver_linux64.zip
+                  sudo mv chromedriver /usr/bin/chromedriver
+                  sudo chown root:root /usr/bin/chromedriver
+                  sudo chmod +x /usr/bin/chromedriver
+                  chromium-browser -version
+                  chromedriver --version
+                
 - stage: UITests
   displayName: UI Tests
   jobs:
@@ -182,5 +193,3 @@ stages:
         PathtoPublish: 'automatedtesting/jmeter'
         ArtifactName: 'jmeter'
         publishLocation: 'Container'
-
-
