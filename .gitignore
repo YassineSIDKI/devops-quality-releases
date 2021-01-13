@@ -1,0 +1,9 @@
+*/.terraform
+*jmeter.log
+automatedtesting/jmeter/report/
+automatedtesting/jmeter/stress-report/
+automatedtesting/jmeter/endurancereport/
+automatedtesting/jmeter/endurance-report/
+
+*.tfstate.*
+*.tfstate
