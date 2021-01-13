@@ -18,18 +18,18 @@ stages:
             inputs:
               terraformVersion: "latest"
           - task: TerraformCLI@0
-            inputs:
-              command: "init"
-              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              allowTelemetryCollection: true
-          - task: TerraformCLI@0
-            displayName: "plan task"
             env:
               ARM_SUBSCRIPTION_ID: $(subscription_id)
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(client_secret)
               ARM_TENANT_ID: $(tenant_id)
               ARM_ACCESS_KEY: $(key)
+            inputs:
+              command: "init"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              allowTelemetryCollection: true
+          - task: TerraformCLI@0
+            displayName: "plan task"
             inputs:
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
