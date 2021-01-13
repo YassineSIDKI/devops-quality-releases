@@ -18,12 +18,6 @@ stages:
             inputs:
               terraformVersion: "0.13.4"
           - task: TerraformCLI@0
-            env:
-              ARM_SUBSCRIPTION_ID: $(subscription_id)
-              ARM_CLIENT_ID: $(client_id)
-              ARM_CLIENT_SECRET: $(client_secret)
-              ARM_TENANT_ID: $(tenant_id)
-              ARM_ACCESS_KEY: $(key)
             inputs:
               provider: "azurerm"
               command: "init"
@@ -37,6 +31,12 @@ stages:
               allowTelemetryCollection: true
           - task: TerraformCLI@0
             displayName: "plan task"
+            env:
+              ARM_SUBSCRIPTION_ID: $(subscription_id)
+              ARM_CLIENT_ID: $(client_id)
+              ARM_CLIENT_SECRET: $(client_secret)
+              ARM_TENANT_ID: $(tenant_id)
+              ARM_ACCESS_KEY: $(key)
             inputs:
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
