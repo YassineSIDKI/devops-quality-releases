@@ -18,17 +18,23 @@ stages:
             inputs:
               terraformVersion: "latest"
           - task: TerraformCLI@0
-            env:
-              ARM_SUBSCRIPTION_ID: $(subscription_id)
-              ARM_CLIENT_ID: $(client_id)
-              ARM_CLIENT_SECRET: $(client_secret)
-              ARM_TENANT_ID: $(tenant_id)
-              ARM_ACCESS_KEY: $(key)
+            # env:
+            #   ARM_SUBSCRIPTION_ID: $(subscription_id)
+            #   ARM_CLIENT_ID: $(client_id)
+            #   ARM_CLIENT_SECRET: $(client_secret)
+            #   ARM_TENANT_ID: $(tenant_id)
+            #   ARM_ACCESS_KEY: $(key)
             inputs:
+              provider: "azurerm"
               command: "init"
+              backendServiceArm: "eqr"
+              backendAzureRmResourceGroupName: "quality-releases-rg"
+              backendAzureRmStorageAccountName: "qualityreleasessa"
+              backendAzureRmContainerName: "quality-releases-container"
+              backendAzureRmKey: "terraform.tfstate"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               allowTelemetryCollection: true
-          - task: TerraformCLI@0
+          - task: TerraformCLI@1
             displayName: "plan task"
             inputs:
               command: "plan"
