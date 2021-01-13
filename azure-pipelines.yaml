@@ -16,7 +16,7 @@ stages:
               script: "ls /home/vsts/work/_temp/"
           - task: TerraformInstaller@0
             inputs:
-              terraformVersion: "last"
+              terraformVersion: "latest"
           - task: TerraformCLI@0
             inputs:
               provider: "azurerm"
