@@ -27,7 +27,8 @@ stages:
             inputs:
               provider: "azurerm"
               command: "init"
-              backendServiceArm: "quality-releases"
+              #Azure Resource Manager and not Azure classic
+              backendServiceArm: "eqr-ARM"
               backendAzureRmResourceGroupName: "quality-releases-rg"
               backendAzureRmStorageAccountName: "qualityreleasessa"
               backendAzureRmContainerName: "quality-releases-container"
