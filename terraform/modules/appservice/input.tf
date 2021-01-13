@@ -1,18 +1,13 @@
 # Resource Group/Location
 variable "location" {
-  description = ""
-  default     = ""
+  type = string
 }
-
 variable "application_type" {
-  description = ""
-  default     = ""
+  type = string
 }
 variable "resource_type" {
-  description = ""
-  default     = ""
+  type = string
 }
 variable "resource_group" {
-  description = ""
-  default     = ""
+  type = string
 }
