@@ -6,7 +6,6 @@ terraform {
     storage_account_name = "qualityreleasessa"
     container_name       = "quality-releases-container"
     key                  = "terraform.tfstate"
-    access_key           = "$(key)"
   }
 }
 

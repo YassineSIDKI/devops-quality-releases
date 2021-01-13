@@ -8,8 +8,8 @@ stages:
         steps:
           - task: InstallSSHKey@0
             inputs:
-              knownHostsEntry: 'default'
-              sshKeySecureFile: 'id_rsa'
+              knownHostsEntry: "default"
+              sshKeySecureFile: "id_rsa"
           - task: Bash@3
             inputs:
               targetType: "inline"
@@ -24,11 +24,12 @@ stages:
               allowTelemetryCollection: true
           - task: TerraformCLI@0
             displayName: "plan task"
-            env: 
+            env:
               ARM_SUBSCRIPTION_ID: $(subscription_id)
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(client_secret)
               ARM_TENANT_ID: $(tenant_id)
+              ARM_ACCESS_KEY: $(key)
             inputs:
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
