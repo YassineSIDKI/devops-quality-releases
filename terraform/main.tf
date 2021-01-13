@@ -1,13 +1,13 @@
 provider "azurerm" {
   features {}
-  # }
-  # terraform {
-  #   backend "azurerm" {
-  #     storage_account_name = ""
-  #     container_name       = ""
-  #     key                  = ""
-  #     access_key           = ""
-  #   }
+}
+terraform {
+  backend "azurerm" {
+    storage_account_name = "qualityreleasessa"
+    container_name       = "quality-releases-container"
+    key                  = "terraform.tfstate"
+    access_key           = "$(key)"
+  }
 }
 
 module "resource_group" {

@@ -9,3 +9,5 @@ automatedtesting/jmeter/endurance-report/
 *.tfstate
 
 .DS_Store
+
+*.plan
