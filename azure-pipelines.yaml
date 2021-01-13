@@ -23,7 +23,7 @@ stages:
               command: "init"
               #Azure Resource Manager and not Azure classic
               backendServiceArm: "eqr-ARM"
-              backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
+              backendAzureRmResourceGroupName: "quality-releases-rg"
               backendAzureRmStorageAccountName: "qualityreleasessa"
               backendAzureRmContainerName: "quality-releases-container"
               backendAzureRmKey: "terraform.tfstate"
@@ -32,14 +32,14 @@ stages:
           - task: TerraformCLI@0
             displayName: "plan task"
             inputs:
+              provider: "azurerm"
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              allowTelemetryCollection: true
               environmentServiceName: "eqr-ARM"
           - task: TerraformCLI@0
             inputs:
+              provider: "azurerm"
               command: "apply"
-              allowTelemetryCollection: true
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               environmentServiceName: "eqr-ARM"
   # - stage: Build
