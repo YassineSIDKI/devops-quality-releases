@@ -27,7 +27,7 @@ stages:
             inputs:
               provider: "azurerm"
               command: "init"
-              backendServiceArm: "eqr"
+              backendServiceArm: "quality-releases"
               backendAzureRmResourceGroupName: "quality-releases-rg"
               backendAzureRmStorageAccountName: "qualityreleasessa"
               backendAzureRmContainerName: "quality-releases-container"
