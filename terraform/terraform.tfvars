@@ -1,6 +1,6 @@
 # Resource Group/Location
 location = "eastus"
-resource_group = "ensuring-quality-releases-rg"
+resource_group = "quality-releases-rg"
 application_type = "qa-releases"
 
 virtual_network_name = "ensuring-quality-releases-vnet"
