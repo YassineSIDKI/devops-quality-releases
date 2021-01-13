@@ -16,7 +16,7 @@ stages:
               script: "ls /home/vsts/work/_temp/"
           - task: TerraformInstaller@0
             inputs:
-              terraformVersion: "latest"
+              terraformVersion: "0.13.4"
           - task: TerraformCLI@0
             # env:
             #   ARM_SUBSCRIPTION_ID: $(subscription_id)
