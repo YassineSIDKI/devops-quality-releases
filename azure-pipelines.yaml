@@ -23,7 +23,7 @@ stages:
               command: "init"
               #Azure Resource Manager and not Azure classic
               backendServiceArm: "eqr-ARM"
-              backendAzureRmResourceGroupName: "quality-releases-rg"
+              backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
               backendAzureRmStorageAccountName: "qualityreleasessa"
               backendAzureRmContainerName: "quality-releases-container"
               backendAzureRmKey: "terraform.tfstate"
