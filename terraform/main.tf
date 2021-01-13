@@ -1,5 +1,13 @@
 provider "azurerm" {
   features {}
+  # }
+  # terraform {
+  #   backend "azurerm" {
+  #     storage_account_name = ""
+  #     container_name       = ""
+  #     key                  = ""
+  #     access_key           = ""
+  #   }
 }
 
 module "resource_group" {

@@ -1,3 +1,4 @@
+
 */.terraform
 *jmeter.log
 automatedtesting/jmeter/report/
@@ -11,3 +12,7 @@ automatedtesting/jmeter/endurance-report/
 .DS_Store
 
 *.plan
+
+jmeter.log
+
+

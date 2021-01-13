@@ -36,11 +36,12 @@ stages:
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               allowTelemetryCollection: true
               environmentServiceName: "eqr-ARM"
-          # - task: TerraformCLI@0
-          #   inputs:
-          #     command: "apply"
-          #     allowTelemetryCollection: true
-          #     workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+          - task: TerraformCLI@0
+            inputs:
+              command: "apply"
+              allowTelemetryCollection: true
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              environmentServiceName: "eqr-ARM"
   # - stage: Build
   #   jobs:
   #     - job: Build
