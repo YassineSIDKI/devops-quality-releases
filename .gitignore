@@ -1,5 +1,6 @@
 
-*/.terraform
+terraform/.terraform/
+
 *jmeter.log
 automatedtesting/jmeter/report/
 automatedtesting/jmeter/stress-report/
