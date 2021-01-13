@@ -37,11 +37,6 @@ stages:
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               environmentServiceName: "eqr-ARM"
           - task: TerraformCLI@0
-            env:
-              ARM_SUBSCRIPTION_ID: $(subscription_id)
-              ARM_CLIENT_ID: $(client_id)
-              ARM_CLIENT_SECRET: $(client_secret)
-              ARM_TENANT_ID: $(tenant_id)
             inputs:
               provider: "azurerm"
               command: "apply"
