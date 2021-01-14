@@ -10,23 +10,27 @@ stages:
             inputs:
               knownHostsEntry: "default"
               sshKeySecureFile: "id_rsa"
+          - task: DownloadSecureFile@1
+            displayName: "download azure conf file"
+            inputs:
+              secureFile: "azurecreds.conf"
           - task: Bash@3
             inputs:
               targetType: "inline"
-              script: "ls /home/vsts/work/_temp/"
+              script: "ls $(caCertificate.secureFilePath)"
           - task: TerraformInstaller@0
             inputs:
               terraformVersion: "latest"
           - task: TerraformCLI@0
             inputs:
               provider: "azurerm"
-              command: "init"
+              command: "init -backend-config=$(caCertificate.secureFilePath)/azurecreds.conf"
               #Azure Resource Manager and not Azure classic
-              backendServiceArm: "eqr-ARM"
-              backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
-              backendAzureRmStorageAccountName: "qualityreleasessa"
-              backendAzureRmContainerName: "quality-releases-container"
-              backendAzureRmKey: "terraform.tfstate"
+              # backendServiceArm: "eqr-ARM"
+              # backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
+              # backendAzureRmStorageAccountName: "qualityreleasessa"
+              # backendAzureRmContainerName: "quality-releases-container"
+              # backendAzureRmKey: "terraform.tfstate"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               allowTelemetryCollection: true
           - task: TerraformCLI@0
