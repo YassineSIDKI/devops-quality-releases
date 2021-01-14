@@ -22,19 +22,29 @@ stages:
           - task: TerraformInstaller@0
             inputs:
               terraformVersion: "latest"
+          # - task: TerraformCLI@0
+          #   inputs:
+          #     provider: "azurerm"
+          #     command: "init"
+          #     commandOptions: "-backend-config=$(azurecreds.secureFilePath)"
+          #     #Azure Resource Manager and not Azure classic
+          #     # backendServiceArm: "eqr-ARM"
+          #     # backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
+          #     # backendAzureRmStorageAccountName: "qualityreleasessa"
+          #     # backendAzureRmContainerName: "quality-releases-container"
+          #     # backendAzureRmKey: "terraform.tfstate"
+          #     workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+          #     allowTelemetryCollection: true
+          steps:
           - task: TerraformCLI@0
+            displayName: 'terraform init'
             inputs:
-              provider: "azurerm"
-              command: "init"
-              commandOptions: "-backend-config=$(azurecreds.secureFilePath)"
-              #Azure Resource Manager and not Azure classic
-              # backendServiceArm: "eqr-ARM"
-              # backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
-              # backendAzureRmStorageAccountName: "qualityreleasessa"
-              # backendAzureRmContainerName: "quality-releases-container"
-              # backendAzureRmKey: "terraform.tfstate"
-              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              allowTelemetryCollection: true
+              command: init
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              secureVarsFile: azurecreds.conf
+              backendType: azurerm
+              backendServiceArm: 'eqr-ARM'
+            timeoutInMinutes: 2
           - task: TerraformCLI@0
             displayName: "plan task"
             inputs:
