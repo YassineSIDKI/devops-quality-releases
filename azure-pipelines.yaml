@@ -34,6 +34,7 @@ stages:
           - task: TerraformCLI@0
             inputs:
               command: 'show'
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               allowTelemetryCollection: true
           - task: TerraformCLI@0
             displayName: "plan task"
