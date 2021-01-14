@@ -6,12 +6,12 @@ stages:
     jobs:
       - job:
         steps:
-          - task: InstallSSHKey@0
+          - task: InstallSSHKey@1
             inputs:
               knownHostsEntry: "default"
               sshKeySecureFile: "id_rsa"
           - task: DownloadSecureFile@1
-            name: azurecredsconf
+            name: azurecreds
             displayName: "download azure conf file"
             inputs:
               secureFile: "azurecreds.conf"
@@ -25,7 +25,7 @@ stages:
           - task: TerraformCLI@0
             inputs:
               provider: "azurerm"
-              command: "init -backend-config=$(caCertificate.secureFilePath)/azurecreds.conf"
+              command: "init -backend-config=$(azurecreds.secureFilePath)/azurecreds.conf"
               #Azure Resource Manager and not Azure classic
               # backendServiceArm: "eqr-ARM"
               # backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
