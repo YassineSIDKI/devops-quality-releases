@@ -97,7 +97,7 @@ stages:
                 - task: AzureWebApp@1
                   displayName: "Deploy Azure Web App"
                   inputs:
-                    azureSubscription: "eqr-ARM"
+                    azureSubscription: "eqr-manual-ARM"
                     appType: "webApp"
                     appName: "qa-releases-AppService"
                     package: "$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip"
