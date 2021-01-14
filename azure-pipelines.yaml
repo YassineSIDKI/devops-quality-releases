@@ -22,8 +22,8 @@ stages:
               backendType: azurerm
               backendServiceArm: "eqr-manual-ARM"
               backendAzureRmResourceGroupName: "eqr-rg"
-              backendAzureRmStorageAccountName: "eqrstorage"
-              backendAzureRmContainerName: "eqtcontainer"
+              backendAzureRmStorageAccountName: "eqrsttestorage"
+              backendAzureRmContainerName: "eqtconttestainer"
               backendAzureRmKey: "terraform.tfstate"
             timeoutInMinutes: 2
           - task: Bash@3
