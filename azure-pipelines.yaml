@@ -6,7 +6,7 @@ stages:
     jobs:
       - job:
         steps:
-          - task: InstallSSHKey@1
+          - task: InstallSSHKey@0
             inputs:
               knownHostsEntry: "default"
               sshKeySecureFile: "id_rsa"
