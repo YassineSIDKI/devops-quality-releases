@@ -1,14 +1,14 @@
 provider "azurerm" {
   environment = "public"
   features {}
-}
-terraform {
-  backend "azurerm" {
-    storage_account_name = "eqrstorage"
-    container_name       = "eqtcontainer"
-    key                  = "terraform.tfstate"
-    resource_group_name  = "eqr-rg"
-  }
+  # }
+  # terraform {
+  #   backend "azurerm" {
+  #     storage_account_name = "eqrstorage"
+  #     container_name       = "eqtcontainer"
+  #     key                  = "terraform.tfstate"
+  #     resource_group_name  = "eqr-rg"
+  #   }
 }
 
 module "resource_group" {
