@@ -41,7 +41,6 @@ stages:
             inputs:
               command: init
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              secureVarsFile: azurecreds.conf
               backendType: azurerm
               backendServiceArm: "eqr-ARM"
               backendAzureRmResourceGroupName: "eqr-rg"
