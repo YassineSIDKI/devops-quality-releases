@@ -43,6 +43,10 @@ stages:
               secureVarsFile: azurecreds.conf
               backendType: azurerm
               backendServiceArm: "eqr-ARM"
+              backendAzureRmResourceGroupName: "eqr-rg"
+              backendAzureRmStorageAccountName: "eqrstorage"
+              backendAzureRmContainerName: "eqtcontainer"
+              backendAzureRmKey: "terraform.tfstate"
             timeoutInMinutes: 2
           - task: TerraformCLI@0
             displayName: "plan task"
