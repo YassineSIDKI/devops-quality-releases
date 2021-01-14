@@ -12,10 +12,11 @@ stages:
               sshKeySecureFile: "id_rsa"
           - task: TerraformInstaller@0
             inputs:
-              terraformVersion: "0.13.5"
+              terraformVersion: "latest"
           - task: TerraformCLI@0
             displayName: "terraform init"
             inputs:
+              provider: "azurerm"
               commandOptions: "-backend=true"
               command: init
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
