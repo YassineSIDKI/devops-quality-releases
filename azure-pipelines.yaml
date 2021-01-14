@@ -35,15 +35,14 @@ stages:
           #     # backendAzureRmKey: "terraform.tfstate"
           #     workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
           #     allowTelemetryCollection: true
-          steps:
           - task: TerraformCLI@0
-            displayName: 'terraform init'
+            displayName: "terraform init"
             inputs:
               command: init
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               secureVarsFile: azurecreds.conf
               backendType: azurerm
-              backendServiceArm: 'eqr-ARM'
+              backendServiceArm: "eqr-ARM"
             timeoutInMinutes: 2
           - task: TerraformCLI@0
             displayName: "plan task"
