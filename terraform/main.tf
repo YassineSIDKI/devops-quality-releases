@@ -4,10 +4,10 @@ provider "azurerm" {
 }
 terraform {
   backend "azurerm" {
-    storage_account_name = "eqrstorage"
-    container_name       = "eqtcontainer"
-    key                  = "terraform.tfstate"
-    access_key           = "c82INE56oKXNhgEEStaPebdZtQxgZuSrP6pY4tnH7+zI+hL2nQmSHzXOFjtniXTyjeUCifhAQjaFm8AzrV8UXw=="
+    storage_account_name = ""
+    container_name       = ""
+    key                  = ""
+    access_key           = ""
   }
 }
 
