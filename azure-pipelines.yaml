@@ -13,6 +13,10 @@ stages:
           - task: TerraformInstaller@0
             inputs:
               terraformVersion: "latest"
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: 'ls "$(System.DefaultWorkingDirectory)/terraform"'
           - task: TerraformCLI@0
             displayName: "terraform init"
             inputs:
