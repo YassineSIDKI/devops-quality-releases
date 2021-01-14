@@ -11,6 +11,7 @@ stages:
               knownHostsEntry: "default"
               sshKeySecureFile: "id_rsa"
           - task: DownloadSecureFile@1
+            name: azurecredsconf
             displayName: "download azure conf file"
             inputs:
               secureFile: "azurecreds.conf"
