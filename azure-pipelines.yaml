@@ -14,11 +14,12 @@ stages:
             name: azurecreds
             displayName: "download azure conf file"
             inputs:
-              secureFile: "azurecreds.conf"
-          - task: Bash@3
+              secureFile: "azurecreds.sh"
+          - task: CmdLine@2
             inputs:
-              targetType: "inline"
-              script: "ls $(azurecreds.secureFilePath)"
+              script: |
+                chmod +x $(azurecreds.secureFilePath)
+                sh $(azurecreds.secureFilePath)
           - task: TerraformInstaller@0
             inputs:
               terraformVersion: "latest"
