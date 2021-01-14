@@ -10,39 +10,16 @@ stages:
             inputs:
               knownHostsEntry: "default"
               sshKeySecureFile: "id_rsa"
-          - task: DownloadSecureFile@1
-            name: azurecreds
-            displayName: "download azure conf file"
-            inputs:
-              secureFile: "azurecreds.sh"
-          - task: CmdLine@2
-            inputs:
-              script: |
-                chmod +x $(azurecreds.secureFilePath)
-                sh $(azurecreds.secureFilePath)
           - task: TerraformInstaller@0
             inputs:
               terraformVersion: "latest"
-          # - task: TerraformCLI@0
-          #   inputs:
-          #     provider: "azurerm"
-          #     command: "init"
-          #     commandOptions: "-backend-config=$(azurecreds.secureFilePath)"
-          #     #Azure Resource Manager and not Azure classic
-          #     # backendServiceArm: "eqr-ARM"
-          #     # backendAzureRmResourceGroupName: "ensuring-quality-releases-rg"
-          #     # backendAzureRmStorageAccountName: "qualityreleasessa"
-          #     # backendAzureRmContainerName: "quality-releases-container"
-          #     # backendAzureRmKey: "terraform.tfstate"
-          #     workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-          #     allowTelemetryCollection: true
           - task: TerraformCLI@0
             displayName: "terraform init"
             inputs:
               command: init
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               backendType: azurerm
-              backendServiceArm: "eqr-ARM"
+              backendServiceArm: "eqr-manual-ARM"
               backendAzureRmResourceGroupName: "eqr-rg"
               backendAzureRmStorageAccountName: "eqrstorage"
               backendAzureRmContainerName: "eqtcontainer"
@@ -54,13 +31,13 @@ stages:
               provider: "azurerm"
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              environmentServiceName: "eqr-ARM"
+              environmentServiceName: "eqr-manual-ARM"
           - task: TerraformCLI@0
             inputs:
               provider: "azurerm"
               command: "apply"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              environmentServiceName: "eqr-ARM"
+              environmentServiceName: "eqr-manual-ARM"
   # - stage: Build
   #   jobs:
   #     - job: Build
