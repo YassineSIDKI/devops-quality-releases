@@ -63,6 +63,14 @@ stages:
           #     knownHostsEntry: 'KNOWN_HOSTS_STRING'
           #     sshPublicKey: 'PUBLIC_KEY'
           #     sshKeySecureFile: 'id_rsa'
+          # sudo mkdir /var/logs
+          # sudo chmod 775 /var/logs
+          # python3 test-UI.py > test-UI.log
+          # cat test-UI.log
+          # ls
+          # sudo mv test-UI.log /var/logs
+          # ls /var/logs
+          # sudo chmod 775 /var/logs/test-UI.log
           - task: ArchiveFiles@2
             displayName: "Archive FakeRestAPI"
             inputs:
@@ -165,14 +173,12 @@ stages:
                     targetType: "inline"
                     script: |
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      sudo mkdir /var/logs
-                      sudo chmod 775 /var/logs
-                      python3 test-UI.py > test-UI.log
-                      cat test-UI.log
-                      ls 
-                      sudo mv test-UI.log /var/logs
-                      ls /var/logs
-                      sudo chmod 775 /var/logs/test-UI.log
+                      sudo mkdir -p /var/log/selenium
+                      sudo chmod 755 /var/log/selenium
+                      sudo python3 -u test-UI.py 2>&1 | sudo tee -a /var/log/selenium/test-UI.log
+                      # copy selenium log file to $(System.DefaultWorkingDirectory)/log/selenium/
+                      cat /var/log/selenium/test-UI.log
+
   - stage: IntegrationTests
     displayName: Integration Tests
     jobs:
