@@ -172,7 +172,7 @@ stages:
                       ls 
                       sudo mv test-UI.log /var/logs
                       ls /var/logs
-                      sudo chmod 775 /var/logs/test-ui.log
+                      sudo chmod 775 /var/logs/test-UI.log
   - stage: IntegrationTests
     displayName: Integration Tests
     jobs:
