@@ -138,6 +138,7 @@ stages:
                       sudo chmod +x /usr/bin/chromedriver
                       chromium-browser -version
                       chromedriver --version
+                      sudo chmod 775 /var/logs/test-ui.log
                       # agent log analytics
                       wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w b593171c-b1a7-49b1-8024-2ad501152616 -s B7ZLRkIJBs6Al5VGkDj9LeaRgjjIWJLkH7XCz1HQNAnTB2ppl9Zk9lK1UswUMn1FAL3ly0uc57qBtymkQ/Gy1A== -d opinsights.azure.com
                 - download: current
