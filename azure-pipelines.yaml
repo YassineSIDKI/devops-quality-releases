@@ -143,6 +143,16 @@ stages:
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
+                - task: Bash@3
+                  displayName: UI Tests
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
+                      sudo mkdir /var/logs
+                      python3 test-UI.py > test-UI.log
+                      cat test-UI.log
+                      sudo mv test-UI.log /var/logs
 
   - stage: JMeterTests
     displayName: JMeter Tests
@@ -190,9 +200,8 @@ stages:
                     targetType: "inline"
                     script: |
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      ls $(Pipeline.Workspace)/selenium
                       sudo mkdir /var/logs
-                      python3 $(Pipeline.Workspace)/selenium/test-UI.py > test-UI.log
+                      python3 test-UI.py > test-UI.log
                       cat test-UI.log
                       sudo mv test-UI.log /var/logs
   - stage: IntegrationTests
