@@ -231,7 +231,7 @@ stages:
             inputs:
               testResultsFormat: "JUnit"
               testResultsFiles: "$(System.DefaultWorkingDirectory)/Results/*.xml"
-  - stage: Destroying resources
+  - stage: DestroyingResources
     jobs:
       - job:
         steps:
