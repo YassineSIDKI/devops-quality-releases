@@ -148,6 +148,9 @@ stages:
                       chromedriver --version
                       # agent log analytics
                       wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w b593171c-b1a7-49b1-8024-2ad501152616 -s B7ZLRkIJBs6Al5VGkDj9LeaRgjjIWJLkH7XCz1HQNAnTB2ppl9Zk9lK1UswUMn1FAL3ly0uc57qBtymkQ/Gy1A== -d opinsights.azure.com
+                      #If you face some error with agent try the following
+                      # install manually the agent : https://docs.microsoft.com/fr-fr/azure/azure-monitor/platform/agent-linux#install-the-agent-manually
+                      # restart the agent : sudo sh omsagent*.sh --purge
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
@@ -173,11 +176,13 @@ stages:
                     targetType: "inline"
                     script: |
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      sudo mkdir -p /var/log/selenietum
+                      sudo mkdir -p /var/log/selenium
                       sudo chmod 755 /var/log/selenium
-                      sudo python3 -u test-UI.py 2>&1 | sudo tee -a /var/log/selenium/test-UI.log
-                      # copy selenium log file to $(System.DefaultWorkingDirectory)/log/selenium/
-                      cat /var/log/selenium/test-UI.log
+                      python3 test-UI.py > test-UI.log
+                      cat test-UI.log
+                      ls
+                      sudo mv test-UI.log /var/log/selenium/
+                      sudo chmod 775 /var/log/selenium/test-UI.log
 
   - stage: IntegrationTests
     displayName: Integration Tests
