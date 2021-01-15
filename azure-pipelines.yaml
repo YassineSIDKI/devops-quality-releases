@@ -173,7 +173,7 @@ stages:
                     targetType: "inline"
                     script: |
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      sudo mkdir -p /var/log/selenium
+                      sudo mkdir -p /var/log/selenietum
                       sudo chmod 755 /var/log/selenium
                       sudo python3 -u test-UI.py 2>&1 | sudo tee -a /var/log/selenium/test-UI.log
                       # copy selenium log file to $(System.DefaultWorkingDirectory)/log/selenium/
