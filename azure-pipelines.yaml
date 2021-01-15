@@ -231,3 +231,46 @@ stages:
             inputs:
               testResultsFormat: "JUnit"
               testResultsFiles: "$(System.DefaultWorkingDirectory)/Results/*.xml"
+  - stage: Destroying resources
+    jobs:
+      - job:
+        steps:
+          - task: InstallSSHKey@0
+            inputs:
+              knownHostsEntry: "default"
+              sshKeySecureFile: "id_rsa"
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: "latest"
+          - task: TerraformCLI@0
+            displayName: "terraform init"
+            inputs:
+              provider: "azurerm"
+              commandOptions: "-backend=true"
+              command: init
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              backendType: azurerm
+              backendServiceArm: "eqr-manual-ARM"
+              backendAzureRmResourceGroupName: "eqr-rg"
+              backendAzureRmStorageAccountName: "eqrstorage"
+              backendAzureRmContainerName: "eqtcontainer"
+              backendAzureRmKey: "terraform.tfstate"
+            timeoutInMinutes: 2
+          - task: TerraformCLI@0
+            inputs:
+              command: "show"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              allowTelemetryCollection: true
+          - task: TerraformCLI@0
+            displayName: "plan task"
+            inputs:
+              provider: "azurerm"
+              command: "plan"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              environmentServiceName: "eqr-manual-ARM"
+          - task: TerraformCLI@0
+            inputs:
+              provider: "azurerm"
+              command: "destroy"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+              environmentServiceName: "eqr-manual-ARM"
