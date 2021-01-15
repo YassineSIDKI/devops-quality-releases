@@ -98,7 +98,7 @@ stages:
                   displayName: "Deploy Azure Web App"
                   inputs:
                     azureSubscription: "eqr-manual-ARM"
-                    appType: "webApp"
+                    appType: "webAppLinux"
                     appName: "qa-releases-AppService"
                     package: "$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip"
                     deploymentMethod: "auto"
@@ -239,12 +239,3 @@ stages:
             inputs:
               testResultsFormat: "JUnit"
               testResultsFiles: "$(System.DefaultWorkingDirectory)/Results/*.xml"
-  - stage: DestroyResource
-    displayName: Destroying resources
-    jobs:
-      - job:
-        steps:
-          - task: TerraformCLI@0
-            inputs:
-              command: "destroy"
-              environmentServiceName: "eqr-manual-ARM"
