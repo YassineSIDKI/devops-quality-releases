@@ -166,9 +166,12 @@ stages:
                     script: |
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
                       sudo mkdir /var/logs
+                      sudo chmod 775 /var/logs
                       python3 test-UI.py > test-UI.log
                       cat test-UI.log
+                      ls 
                       sudo mv test-UI.log /var/logs
+                      ls /var/logs
                       sudo chmod 775 /var/logs/test-ui.log
   - stage: IntegrationTests
     displayName: Integration Tests
