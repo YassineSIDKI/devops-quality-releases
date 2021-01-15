@@ -143,15 +143,7 @@ stages:
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
-                - task: Bash@3
-                  displayName: UI Tests
-                  inputs:
-                    targetType: "inline"
-                    script: |
-                      unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      sudo mkdir /var/logs
-                      python3 uitests.py > ui-logs.log
-                      sudo mv ui-logs.log /var/logs
+
   - stage: JMeterTests
     displayName: JMeter Tests
     jobs:
@@ -177,31 +169,31 @@ stages:
               ArtifactName: "jmeter"
               publishLocation: "Container"
 
-  # - stage: UITests
-  #   displayName: UI Tests
-  #   jobs:
-  #     - deployment: VMRunUITests
-  #       displayName: Run UI Tests
-  #       environment:
-  #         name: "VM-TEST"
-  #         resourceType: VirtualMachine
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - download: current
-  #                 displayName: "Download Selenium"
-  #                 artifact: selenium
-  #               - task: Bash@3
-  #                 displayName: UI Tests
-  #                 inputs:
-  #                   targetType: "inline"
-  #                   script: |
-  #                     unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-  #                     sudo mkdir /var/logs
-  #                     python3 uitests.py > ui-logs.log
-  #                     cat ui-logs.log
-  #                     sudo mv ui-logs.log /var/logs
+  - stage: UITests
+    displayName: UI Tests
+    jobs:
+      - deployment: VMRunUITests
+        displayName: Run UI Tests
+        environment:
+          name: "VM-TEST"
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  displayName: "Download Selenium"
+                  artifact: selenium
+                - task: Bash@3
+                  displayName: UI Tests
+                  inputs:
+                    targetType: "inline"
+                    script: |
+                      unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
+                      sudo mkdir /var/logs
+                      python3 test-UI.py > test-UI.log
+                      cat test-UI.log
+                      sudo mv test-UI.log /var/logs
   - stage: IntegrationTests
     displayName: Integration Tests
     jobs:
