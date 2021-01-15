@@ -143,41 +143,6 @@ stages:
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
-                - task: Bash@3
-                  displayName: UI Tests
-                  inputs:
-                    targetType: "inline"
-                    script: |
-                      unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
-                      sudo mkdir /var/logs
-                      python3 test-UI.py > test-UI.log
-                      cat test-UI.log
-                      sudo mv test-UI.log /var/logs
-
-  - stage: JMeterTests
-    displayName: JMeter Tests
-    jobs:
-      - job: JMeterTests
-        displayName: JMeterTests
-        steps:
-          - task: JMeterInstaller@0
-            inputs:
-              jmeterVersion: "5.2.1"
-          - task: Bash@3
-            displayName: EnduranceTest
-            inputs:
-              targetType: "inline"
-              script: "jmeter -n -t automatedtesting/jmeter/EnduranceTestSuite.jmx -Jresdir=automatedtesting/jmeter/endurancepages.csv -l automatedtesting/jmeter/report/enduranceresults.jtl -e -o automatedtesting/jmeter/endurancereport"
-          - task: Bash@3
-            displayName: StressTest
-            inputs:
-              targetType: "inline"
-              script: "jmeter -n -t automatedtesting/jmeter/StressTestSuite.jmx -Jresdir=automatedtesting/jmeter/stresspages.csv -l automatedtesting/jmeter/report/stressresults.jtl -e -o automatedtesting/jmeter/stressreport"
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: "automatedtesting/jmeter"
-              ArtifactName: "jmeter"
-              publishLocation: "Container"
 
   - stage: UITests
     displayName: UI Tests
@@ -222,13 +187,13 @@ stages:
           - task: CmdLine@2
             displayName: Run Regression Tests
             inputs:
-              script: "newman run automatedtesting/postman/RegressionTestSuite.json -e automatedtesting/postman/RegressionTestSuite.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/RegressionTests.xml"
+              script: "newman run automatedtesting/postman/RegressionTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/RegressionTests.xml"
               workingDirectory: "$(System.DefaultWorkingDirectory)"
             continueOnError: true
           - task: CmdLine@2
             displayName: Run Data Validation Tests
             inputs:
-              script: "newman run automatedtesting/postman/DataValidationTestSuite.json -e automatedtesting/postman/DataValidationTestSuite.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/DataValidationTests.xml"
+              script: "newman run automatedtesting/postman/DataValidationTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/DataValidationTests.xml"
               workingDirectory: "$(System.DefaultWorkingDirectory)"
             continueOnError: true
           - task: CmdLine@2
@@ -241,3 +206,27 @@ stages:
             inputs:
               testResultsFormat: "JUnit"
               testResultsFiles: "$(System.DefaultWorkingDirectory)/Results/*.xml"
+  - stage: JMeterTests
+    displayName: JMeter Tests
+    jobs:
+      - job: JMeterTests
+        displayName: JMeterTests
+        steps:
+          - task: JMeterInstaller@0
+            inputs:
+              jmeterVersion: "5.2.1"
+          - task: Bash@3
+            displayName: EnduranceTest
+            inputs:
+              targetType: "inline"
+              script: "jmeter -n -t automatedtesting/jmeter/EnduranceTestSuite.jmx -Jresdir=automatedtesting/jmeter/endurancepages.csv -l automatedtesting/jmeter/report/enduranceresults.jtl -e -o automatedtesting/jmeter/endurancereport"
+          - task: Bash@3
+            displayName: StressTest
+            inputs:
+              targetType: "inline"
+              script: "jmeter -n -t automatedtesting/jmeter/StressTestSuite.jmx -Jresdir=automatedtesting/jmeter/stresspages.csv -l automatedtesting/jmeter/report/stressresults.jtl -e -o automatedtesting/jmeter/stressreport"
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "automatedtesting/jmeter"
+              ArtifactName: "jmeter"
+              publishLocation: "Container"
