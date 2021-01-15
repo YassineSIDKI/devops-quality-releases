@@ -139,7 +139,7 @@ stages:
                       chromium-browser -version
                       chromedriver --version
                       # agent log analytics
-                      wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w dbf2bd83-6d47-436b-a499-a2b566def8fe -s MuSR8Ti5MMi0E+9+1NM4NxCxFqJcfLzuGD0EtGhjXo3Vhy/THcSdCf1WyQnkXafD+6DiFjiOAEfJiQh6EbZVeg== -d opinsights.azure.com
+                      wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w b593171c-b1a7-49b1-8024-2ad501152616 -s B7ZLRkIJBs6Al5VGkDj9LeaRgjjIWJLkH7XCz1HQNAnTB2ppl9Zk9lK1UswUMn1FAL3ly0uc57qBtymkQ/Gy1A== -d opinsights.azure.com
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
@@ -187,13 +187,13 @@ stages:
           - task: CmdLine@2
             displayName: Run Regression Tests
             inputs:
-              script: "newman run automatedtesting/postman/RegressionTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/RegressionTests.xml"
+              script: "newman run automatedtesting/postman/RegressionTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export $(System.DefaultWorkingDirectory)/Results/RegressionTests.xml"
               workingDirectory: "$(System.DefaultWorkingDirectory)"
             continueOnError: true
           - task: CmdLine@2
             displayName: Run Data Validation Tests
             inputs:
-              script: "newman run automatedtesting/postman/DataValidationTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export Results/DataValidationTests.xml"
+              script: "newman run automatedtesting/postman/DataValidationTestSuite.json -e automatedtesting/postman/TestEnv.Environment.json --delay-request 5000 --bail newman -x --reporters cli,junit --reporter-junit-export $(System.DefaultWorkingDirectory)/Results/DataValidationTests.xml"
               workingDirectory: "$(System.DefaultWorkingDirectory)"
             continueOnError: true
           - task: CmdLine@2
