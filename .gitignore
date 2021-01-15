@@ -32,4 +32,6 @@ override.tf.json
 # jmeter
 jmeter.log
 
-notes
+automatedtesting/jmeter/endurancereport
+automatedtesting/jmeter/report/
+
