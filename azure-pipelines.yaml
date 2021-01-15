@@ -32,10 +32,6 @@ stages:
               backendAzureRmContainerName: "eqtcontainer"
               backendAzureRmKey: "terraform.tfstate"
             timeoutInMinutes: 2
-          - task: Bash@3
-            inputs:
-              targetType: "inline"
-              script: 'ls "$(System.DefaultWorkingDirectory)/terraform"'
           - task: TerraformCLI@0
             inputs:
               command: "show"
@@ -87,14 +83,13 @@ stages:
               replaceExistingArchive: true
           - upload: $(Build.ArtifactStagingDirectory)/selenium-tests.zip
             artifact: selenium
-
   - stage: WebAppDeployment
     displayName: Web App Deployment
     jobs:
       - deployment: FakeRestAPI
         pool:
           vmImage: "Ubuntu-16.04"
-        environment: "eqr"
+        environment: "eqr-env"
         strategy:
           runOnce:
             deploy:
