@@ -23,7 +23,7 @@ Devops For Microsoft Azure Udacity Final Project
 
 - The following screenshot showing the output of init, plan and apply terraform tasks
 
-  ![terraform1](screenshots/terraform1.png)
+  ![terraform1](screens/terraform1.png)
 
 - Here is tfstate well uploaded and updated to the used container
 
