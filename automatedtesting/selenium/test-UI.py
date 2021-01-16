@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 Locators = {'id_username': 'user-name', 'id_password': 'password', 'id_login': 'login-button',
-            'class_add_to_cart': 'btn_primary', 'class_remove': 'btn_secondary '}
+            'class_add_to_cart': 'inventory_item', 'class_remove': 'btn_secondary '}
 
 # Start the browser and login with standard_user
 
@@ -27,14 +27,21 @@ def login(user, password):
     print('Add all element to cart')
     list_add_to_cart = driver.find_elements_by_class_name(
         Locators['class_add_to_cart'])
-    for element in list_add_to_cart:
-        element.click()
 
-    print('Remove all element from cart')
-    list_remove = driver.find_elements_by_class_name(
-        Locators['class_remove'])
-    for element in list_remove:
-        element.click()
+    for element in list_add_to_cart:
+        item_name = element.find_element_by_class_name(
+            'inventory_item_name').text
+        element.find_element_by_class_name('btn_inventory').click()
+        print('Added {} to cart'.format(item_name))
+
+    driver.find_element_by_class_name('shopping_cart_link').click()
+
+    for item in driver.find_elements_by_class_name('cart_item'):
+        item_name = item.find_element_by_class_name('inventory_item_name').text
+        item.find_element_by_class_name('cart_button').click()
+        print('Removed {} from cart'.format(item_name))
+
+    driver.find_element_by_class_name('btn_secondary').click()
 
     print('Check if all remove buttons changed to add to cart buttons')
     list_add_to_cart_after_test = driver.find_elements_by_class_name(
