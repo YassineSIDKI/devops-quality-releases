@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/yassinesidki822/Quality-releases/_apis/build/status/YassineSIDKI.devops-quality-releases?branchName=master)](https://dev.azure.com/yassinesidki822/Quality-releases/_build/latest?definitionId=1&branchName=master)
+
 # Overview
 
 Devops For Microsoft Azure Udacity Final Project

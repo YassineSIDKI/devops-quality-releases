@@ -19,7 +19,7 @@ stages:
             inputs:
               terraformVersion: "latest"
           - task: TerraformCLI@0
-            displayName: "terraform init"
+            displayName: "Terraform init"
             inputs:
               provider: "azurerm"
               commandOptions: "-backend=true"
@@ -33,18 +33,14 @@ stages:
               backendAzureRmKey: "terraform.tfstate"
             timeoutInMinutes: 2
           - task: TerraformCLI@0
-            inputs:
-              command: "show"
-              workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
-              allowTelemetryCollection: true
-          - task: TerraformCLI@0
-            displayName: "plan task"
+            displayName: "Terraform plan"
             inputs:
               provider: "azurerm"
               command: "plan"
               workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
               environmentServiceName: "eqr-manual-ARM"
           - task: TerraformCLI@0
+            displayName: "Terraform apply"
             inputs:
               provider: "azurerm"
               command: "apply"
