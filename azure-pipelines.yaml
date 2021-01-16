@@ -149,8 +149,8 @@ stages:
                       # agent log analytics
                       wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w b593171c-b1a7-49b1-8024-2ad501152616 -s B7ZLRkIJBs6Al5VGkDj9LeaRgjjIWJLkH7XCz1HQNAnTB2ppl9Zk9lK1UswUMn1FAL3ly0uc57qBtymkQ/Gy1A== -d opinsights.azure.com
                       #If you face some error with agent try the following
-                      # install manually the agent : https://docs.microsoft.com/fr-fr/azure/azure-monitor/platform/agent-linux#install-the-agent-manually
-                      # restart the agent : sudo sh omsagent*.sh --purge
+                      #install manually the agent : https://docs.microsoft.com/fr-fr/azure/azure-monitor/platform/agent-linux#install-the-agent-manually
+                      #restart the agent : sudo sh omsagent*.sh --purge
                 - download: current
                   displayName: "Download Selenium"
                   artifact: selenium
@@ -178,7 +178,7 @@ stages:
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
                       sudo mkdir -p /var/log/selenium
                       sudo chmod 755 /var/log/selenium
-                      python3 test-UI.py > test-UI.log
+                      sudo python3 test-UI.py > test-UI.log
                       cat test-UI.log
                       ls
                       sudo mv test-UI.log /var/log/selenium/
