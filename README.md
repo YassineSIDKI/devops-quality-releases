@@ -42,7 +42,7 @@ Devops For Microsoft Azure Udacity Final Project
 - Functional test suites
 
   - screenshot of the execution of the test suite by the CI/CD pipeline
-    ![uitest](screens/uitests)
+    ![uitest](screens/uitests.png)
 
 - API-integration tests
 
