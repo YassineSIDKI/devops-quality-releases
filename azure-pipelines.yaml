@@ -180,10 +180,8 @@ stages:
                       sudo chmod 755 /var/log/selenium
                       python3 test-UI.py > test-UI.log
                       cat test-UI.log
-                      ls
                       sudo mv test-UI.log /var/log/selenium/
                       sudo chmod 775 /var/log/selenium/test-UI.log
-
   - stage: IntegrationTests
     displayName: Integration Tests
     jobs:
