@@ -178,7 +178,7 @@ stages:
                       unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
                       sudo mkdir -p /var/log/selenium
                       sudo chmod 755 /var/log/selenium
-                      sudo python3 test-UI.py > test-UI.log
+                      python3 test-UI.py > test-UI.log
                       cat test-UI.log
                       ls
                       sudo mv test-UI.log /var/log/selenium/
