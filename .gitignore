@@ -34,4 +34,5 @@ jmeter.log
 
 automatedtesting/jmeter/endurancereport
 automatedtesting/jmeter/report/
+automatedtesting/jmeter/stressreport/
 
